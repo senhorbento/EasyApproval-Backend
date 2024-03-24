@@ -1,7 +1,24 @@
 from flask import Blueprint, jsonify, request
 from flasgger import Swagger
 
+from src.Repositories.DocumentRepository import DocumentRepository
+
 document_bp = Blueprint('document_bp', __name__)
+
+@document_bp.route('/read', methods=['GET'])
+def get_all_document():
+    """
+    Get a all documents
+    ---
+    responses:
+      200:
+        description: Document found
+      404:
+        description: Document not found
+    """
+    _repository = DocumentRepository()
+    return jsonify(_repository.Select_All()), 404
+
 
 @document_bp.route('/<string:documentGuid>', methods=['GET'])
 def get_document(documentGuid):
@@ -16,6 +33,7 @@ def get_document(documentGuid):
     """
     return jsonify({"error": "Approvals not found"}), 404
 
+
 @document_bp.route('/list/<string:approverGuid>', methods=['GET'])
 def get_all_to_approver(approverGuid):
     """
@@ -28,6 +46,7 @@ def get_all_to_approver(approverGuid):
         description: Document not found
     """
     return jsonify({"error": "Approvals not found"}), 404
+
 
 @document_bp.route('/Pdf/<string:documentGuid>', methods=['GET'])
 def get_all_documents(documentGuid):
@@ -42,36 +61,36 @@ def get_all_documents(documentGuid):
     """
     return jsonify({"error": "Approvals not found"}), 404
 
+
 @document_bp.route('/create', methods=['POST'])
 def create_document():
     """
     Create a new document
     ---
-    parameters:
-      - name: requesterGuid
-        in: formData
-        type: string
-        required: true
-      - name: requesterName
-        in: formData
-        type: string
-        required: true
-      - name: documentName
-        in: formData
-        type: string
-        required: true
-      - name: observation
-        in: formData
-        type: string
-        required: true
-      - name: pdfOriginal
-        in: formData
-        type: string
-        required: true
-      - name: approvals
-        in: formData
-        type: string
-        required: true
+    post:
+      summary: Creates a new user.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            required:
+              - requesterId
+              - documentName
+              - pdfOriginal
+              - approvals
+            properties:
+              requesterId:
+                type: string
+              documentName:
+                type: string
+              pdfOriginal:
+                type: string
+              approvals:
+                type: object
     responses:
       201:
         description: Document created

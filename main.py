@@ -1,7 +1,16 @@
 from flask import Flask
-from Controllers.ApprovalController import approval_bp
-from Controllers.DocumentController import document_bp
 from flasgger import Swagger
+from src.Controllers.ApprovalController import approval_bp
+from src.Controllers.DocumentController import document_bp
+from src.Core.DB import DB
+
+with open('./src/Core/creation_script.sql', 'r') as file:
+    create_table_queries = file.read().split(';')
+
+db = DB()
+for query in create_table_queries:
+    if query.strip():
+        db.create_table(query)
 
 app = Flask(__name__)
 

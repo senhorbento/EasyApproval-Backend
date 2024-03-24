@@ -1,19 +1,18 @@
 class ApprovalInsert:
     def __init__(self):
         self.documentGuid = ""
-        self.approverGuid = []
+        self.approverId = []
 
 
 class ApprovalRead:
     def __init__(self):
-        self.documentGuid = ""
-        self.approverGuid = ""
-        self.observation = ""
+        self.documentId = ""
+        self.approverId = ""
+        self.approvalDate = ""
         self.approved = False
 
 class ApprovalUpdate:
     def __init__(self):
-        self.documentGuid = ""
-        self.approverGuid = ""
-        self.observation = ""
+        self.documentId = ""
+        self.approverId = ""
         self.approved = False
